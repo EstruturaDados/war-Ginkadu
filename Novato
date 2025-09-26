@@ -1,6 +1,90 @@
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
-int main(){
-    printf("hello world");
+//definindo escopo do jogo(quantidade de "jogadores")
+#define MAX_TERRITORIO 5
+#define TAM_STRING 100
+
+//estabeleceno a struct Territorio
+struct Territorio{
+    char nome[30];
+    char cor[10];
+    int tropas;
+};
+
+//limpar buffer 
+void limparBuffferEntrada(){
+    int c;
+    while((c = getchar()) != '\n' && c != EOF);
 }
 
+int main(){ 
+    //estabelicimento das variaveis
+    struct Territorio paises[MAX_TERRITORIO];
+    int totalterritorio = 0;
+    int opcao;
+    do{
+        //exibir menu
+        printf("##############\n");
+        printf("1- Adicionar territorio\n");
+        printf("2- Listar territorios\n");
+        printf("0- Sair\n");
+        printf("---------------\n");
+        printf("Escolha uma opcao\n");
+        //leitura opcao usuario
+        scanf("%d", &opcao);
+        limparBuffferEntrada();
+        //processamento das opcoes
+        switch(opcao){
+            case 1: //input do usuario para opcao 1
+                printf("--- Cadastro de territorio ---\n");
+                if(totalterritorio < MAX_TERRITORIO) {
+                    printf("Digite o nome do territorio: ");
+                    fgets(paises[totalterritorio].nome, TAM_STRING, stdin);
+                    printf("Digite a cor: ");
+                    fgets(paises[totalterritorio].cor, TAM_STRING, stdin);
+                    
+                    paises[totalterritorio].nome[strcspn(paises[totalterritorio].nome, "\n")] = '\0';
+                    paises[totalterritorio].cor[strcspn(paises[totalterritorio].cor, "\n")] = '\0';
+
+                    printf("Digite a quantidade de tropas: ");
+                    scanf("%d", &paises[totalterritorio].tropas);
+                    limparBuffferEntrada();
+
+                    totalterritorio++;
+                    printf("\nTerritorio cadastrado com sucesso\n");
+                } else{
+                    printf("Limite de territorios atingido! Nao e possivel cadastrar mais.\n");
+                }
+            case 2: //opcao 2, listar territorio
+                if(totalterritorio == 0){ //caso nao tenha territorio cadastrado ainda
+                    printf("Nenhum territorio registrado\n");
+                }else if(opcao == 2){ //caso tenha
+                    printf("\n--- Lista de territorios ---\n");                    
+                    for(int i = 0; i < totalterritorio; i++){
+                        printf("----------------------\n");
+                        printf("Territorio %d\n", i + 1);
+                        printf("Nome: %s\n", paises[i].nome);
+                        printf("Cor do exercito: %s\n", paises[i].cor)/
+                        printf("Quantidade de tropas: %d\n", paises[i].tropas);
+                    }
+                        printf("----------------------\n");
+                }
+                printf("\nPressione enter para continuar...\n");
+                getchar();
+                break;
+            
+            case 0: //terminando o programa
+                printf("\nSaindo do programa...");
+                break;
+
+            default: //opcao invalida
+                printf("\nOpcao invalida! Tente novamente.\n");
+                printf("\nPressione enter para continuar...");
+                getchar();
+                break;
+        }
+    } while(opcao != 0);
+    return 0;
+}
