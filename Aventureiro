@@ -1,0 +1,100 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <string.h>
+#include <conio.h>
+
+//limitações
+#define MAX_TERRITORIO 5
+#define TAM_STR 100
+#define MIN_TERRITORIO 1
+
+//estrutura dos territorios
+struct Territorio{
+    char nome[20];
+    char cor[20];
+    int tropas;
+};
+
+
+//limpar buffer 
+void limparBuffferEntrada(){
+    int c;
+    while((c = getchar()) != '\n' && c != EOF);
+}
+// ação principal
+int main(){
+    srand(time(NULL));
+    printf("         ###########\n");
+    printf("         --- War ---\n");
+    printf("         ###########\n");
+    struct Territorio paises[MAX_TERRITORIO];
+    int total_territorios = 0;
+    int opcao;
+    //cadastro dos continentes
+    while (total_territorios < MAX_TERRITORIO){
+        int i = 1;
+        printf("\n--- Cadastro do territorio %d---\n", i+total_territorios);
+        printf("Digite o nome do continente: ");
+        fgets(paises[total_territorios].nome, TAM_STR, stdin);
+        printf("Digite a cor do exercito: ");
+        fgets(paises[total_territorios].cor, TAM_STR, stdin);
+
+        paises[total_territorios].nome[strcspn(paises[total_territorios].nome, "\n")] = '\0';
+        paises[total_territorios].cor[strcspn(paises[total_territorios].cor, "\n")] = '\0';
+
+        printf("Digite a quantida de tropas: ");
+        scanf("%d", &paises[total_territorios].tropas);
+        limparBuffferEntrada();
+        i++;
+        total_territorios++;
+    }
+     // mostrando todos os continentes cadastrados
+    printf("\n#################");
+    printf("  Mapa do mundo ");
+    printf("#################\n");
+    for(int i = 0; i < total_territorios; i++){
+        printf("%d. %s (Exercito: %s, tropas: %d)\n", i, paises[i].nome, paises[i].cor, paises[i].tropas);
+    }
+    //batalha entre os continentes
+    while(total_territorios > MIN_TERRITORIO){
+
+        int identificador= 0;
+        printf("\n--- Fase de batalha ---\n");
+        printf("Escolha o numero do territorio ATACANTE(0-4): ");
+        scanf("%d", &identificador);
+        int ataque = paises[identificador].tropas;
+        printf("%s", paises[identificador].nome);
+        limparBuffferEntrada();
+        //maior avançoa té aqui
+        printf("Escolha o numero do territorio DEFENSOR(0-4): ");
+        scanf("%d", &identificador);
+        int defesa = paises[identificador].tropas;
+        limparBuffferEntrada();
+        printf("%s", paises[identificador].nome);
+        if(identificador == 0);{
+            int dadoAtaque = (rand() % 5) + 1;
+            int dadoDefesa = (rand() % 5) + 1;
+            printf("\nDado ataque: %d | Dado defesa: %d ", dadoAtaque, dadoDefesa);
+            if(dadoAtaque>dadoDefesa);{
+                defesa - 1;
+                int *vitoria =  &defesa;
+                printf("(O ataque foi bem sucedido!! E a defesa perdeu 1 tropa restando: %d)\n", vitoria);
+            }
+                if(dadoAtaque<dadoDefesa);{
+                    int resultado_defesa_vitoriosa = ataque - 1;
+                    printf("O ataque falhou! O ataque perdeu 1 tropa");
+                }
+            // mostrando todos os continentes cadastrados
+        printf("\n################");
+        printf("  Mapa do mundo ");
+        printf("#################\n");
+        for(int i = 0; i < total_territorios; i++){
+            printf("%d. %s (Exercito: %s, tropas: %d)\n", i, paises[i].nome, paises[i].cor, paises[i].tropas);
+        }
+            identificador++;
+        }
+
+    }
+    return 0;
+}
